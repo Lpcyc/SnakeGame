@@ -6,6 +6,8 @@ add_executable(SnakeGame
 	main.cpp
 	game.cpp 
 	game.h
+	gameobject.cpp
+	gameobject.h
 	map.cpp 
 	map.h 
 	snake.cpp 
