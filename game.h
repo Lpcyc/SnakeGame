@@ -6,9 +6,11 @@
 #include <memory>
 
 // ============================================
-// 鐭ヨ瘑鐐癸細鍔ㄦ€佸叧鑱?(Dynamic Binding / Polymorphism)
+// 知识点：动态关联 (Dynamic Binding / Polymorphism)
 // --------------------------------------------
-// Game绫讳娇鐢℅ameObject鎸囬拡/寮曠敤鏉ョ鐞嗘父鎴忓璞°€?// 閫氳繃铏氬嚱鏁板疄鐜拌繍琛屾椂澶氭€侊紝璋冪敤姝ｇ‘鐨勫璞″疄鐜般€?// ============================================
+// Game类使用GameObject指针/引用来管理游戏对象。
+// 通过虚函数实现运行时多态，调用正确的对象实现。
+// ============================================
 
 class Game {
 private:
@@ -19,10 +21,12 @@ private:
     int defaultSpeed = 3;
     int speed = 3;
     
-    // 浣跨敤shared_ptr绠＄悊娓告垙瀵硅薄锛屾紨绀哄姩鎬佸叧鑱?    std::shared_ptr<Snake> snake;
+    // 使用shared_ptr管理游戏对象，演示动态关联
+    std::shared_ptr<Snake> snake;
     std::shared_ptr<Food> food;
     
-    // 浣跨敤鍩虹被鎸囬拡瀛樺偍娓告垙瀵硅薄锛岀敤浜庢紨绀哄姩鎬佸叧鑱?    std::vector<std::shared_ptr<GameObject>> gameObjects;
+    // 使用基类指针存储游戏对象，用于演示动态关联
+    std::vector<std::shared_ptr<GameObject>> gameObjects;
     
 public:
     enum GameState { MENU, PLAYING, GAMEOVER, PAUSE, EXIT };
@@ -32,21 +36,23 @@ public:
     static constexpr int SPEED_LEVEL_MAX = 7;
     
     // ============================================
-    // 鐭ヨ瘑鐐癸細鏋勯€犲嚱鏁伴噸杞?(Constructor Overloading)
+    // 知识点：构造函数重载 (Constructor Overloading)
     // --------------------------------------------
-    // 鎻愪緵澶氱鍒濆鍖栨柟寮忥細
-    // 1. 榛樿鏋勯€犲嚱鏁帮細浣跨敤榛樿鍦板浘澶у皬
-    // 2. 甯﹀湴鍥惧弬鏁扮殑鏋勯€犲嚱鏁帮細鑷畾涔夊湴鍥惧ぇ灏?    // 3. 甯﹀湴鍥惧拰閫熷害鐨勬瀯閫犲嚱鏁帮細鑷畾涔夊湴鍥惧ぇ灏忓拰鍒濆閫熷害
+    // 提供多种初始化方式：
+    // 1. 默认构造函数：使用默认地图大小
+    // 2. 带地图参数的构造函数：自定义地图大小
+    // 3. 带地图和速度的构造函数：自定义地图大小和初始速度
     // ============================================
     Game();
     Game(int w, int h);
     Game(int w, int h, int initialSpeed);
     
     // ============================================
-    // 鐭ヨ瘑鐐癸細铏氭瀽鏋勫嚱鏁?(Virtual Destructor)
+    // 知识点：虚析构函数 (Virtual Destructor)
     // --------------------------------------------
-    // 铏界劧Game涓嶆槸鍩虹被锛屼絾浣滀负涓€涓鐞嗗姩鎬佸璞＄殑绫伙紝
-    // 浣跨敤铏氭瀽鏋勫嚱鏁版槸鑹ソ鐨勮璁′範鎯紝纭繚娲剧敓绫绘纭噴鏀捐祫婧愩€?    // ============================================
+    // 虽然Game不是基类，但作为一个管理动态对象的类，
+    // 使用虚析构函数是良好的设计习惯，确保派生类正确释放资源。
+    // ============================================
     virtual ~Game();
     
     void generateFood();
@@ -56,9 +62,11 @@ public:
     GameState pause();
     GameState End();
     
-    // 娣诲姞娓告垙瀵硅薄鍒扮鐞嗗垪琛?    void addGameObject(std::shared_ptr<GameObject> obj);
+    // 添加游戏对象到管理列表
+    void addGameObject(std::shared_ptr<GameObject> obj);
     
-    // 娓叉煋鎵€鏈夋父鎴忓璞?- 婕旂ず鍔ㄦ€佸叧鑱?    void renderAllObjects() const;
+    // 渲染所有游戏对象 - 演示动态关联
+    void renderAllObjects() const;
     
 private:
     void logic();
